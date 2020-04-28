@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/color_white"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/color_head"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+
+
+        <RelativeLayout
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_edit_text_bg"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/search_icon"
+                android:layout_alignParentLeft="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@mipmap/search_normal" />
+
+            <EditText
+                android:background="@null"
+                android:layout_toRightOf="@id/search_icon"
+                android:id="@+id/search_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="搜索人物、地点、事物"
+                android:textColorHint="#888888"
+                android:singleLine="true"
+                android:textCursorDrawable="@drawable/shape_edit_text_cursor"
+               android:textColor="@color/color_black"
+                android:textSize="16sp" />
+
+
+            <ImageView
+                android:id="@+id/search_input_delete"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/delete" />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="搜索"
+            android:textColor="@color/Blue"
+            android:textSize="18sp" />
+
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/search_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+
+
+
+</LinearLayout>
