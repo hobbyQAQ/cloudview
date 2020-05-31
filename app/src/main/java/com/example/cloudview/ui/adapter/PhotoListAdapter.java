@@ -1,31 +1,37 @@
 package com.example.cloudview.ui.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.GridView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.cloudview.R;
 import com.example.cloudview.model.PhotoResult;
+import com.example.cloudview.utils.DateUtils;
 import com.example.cloudview.utils.LogUtil;
-import com.example.cloudview.utils.UrlUtils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.chrono.MinguoDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.InnerHolder> {
+    //这是所有的照片的数据
     private List<PhotoResult.DataBean> mData = new ArrayList<>();
-    private SimpleDateFormat to = new SimpleDateFormat("yyyy年MM月dd日");
-    private SimpleDateFormat from = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    //这是按照时间分号类的数据
+    private Map<Integer, List<PhotoResult.DataBean>>  mSortData = new HashMap<>();
+    //初始化的开始位置，用来传给照片查看器应该查看哪张照片
+    private int mStartPosition = 0;
+    private List<Integer> mKeys = new ArrayList<>();
 
     @NonNull
     @Override
@@ -36,30 +42,56 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Inne
 
     @Override
     public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
+        LogUtil.d(PhotoListAdapter.this,"list position="+position+"   list size --> "+mSortData.get(position).size());
         View view = holder.itemView;
-        ImageView photoCoverIv = view.findViewById(R.id.photo_cover_iv);
+//        ImageView photoCoverIv = view.findViewById(R.id.photo_cover_iv);
         TextView dateTitleTv = view.findViewById(R.id.date_title_tv);
-        String url = UrlUtils.path2Url(mData.get(position).getPath());
-        LogUtil.d(this, "url:" + url);
-        Glide.with(view.getContext()).load(url).into(photoCoverIv);
+        RecyclerView gridList = view.findViewById(R.id.photo_list_view);
+        //通过list中的键就能得到通过时间分类的值
         try {
-            Date date = from.parse(mData.get(position).getDate());
-            String time = to.format(date);
-            dateTitleTv.setText(time);
+            String dateStr = DateUtils.theirTime2ourTime(mSortData.get(position).get(0).getDate());
+            dateTitleTv.setText(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        //每一行中数据不同
+        PhotoGridListAdapter photoGridListAdapter = new PhotoGridListAdapter(mSortData.get(position));
+        //同时要将每一行中第一张照片属于所有照片的第几张照片传过去
+        photoGridListAdapter.setStartPosition(mStartPosition);
+        mStartPosition = mStartPosition + mSortData.get(position).size();
+        LogUtil.d(PhotoListAdapter.this,"开始位置 ==== "+mStartPosition+"");
+        photoGridListAdapter.setAllPhoto(mData);
+        gridList.setAdapter(photoGridListAdapter);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),4,RecyclerView.VERTICAL,false);
+        gridList.setLayoutManager(gridLayoutManager);
+
+
+//        String url = UrlUtils.path2Url(mData.get(position).getPath());
+//        LogUtil.d(this, "url:" + url);
+//        Glide.with(view.getContext()).load(url).into(photoCoverIv);
 
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mSortData.size();
     }
 
     public void setData(List<PhotoResult.DataBean> photoList) {
         mData.clear();
         mData.addAll(photoList);
+        //把键重Mapper中取出来放到list中
+        try {
+            mSortData = DateUtils.sortPhotoByDate(photoList);
+            Set<Map.Entry<Integer, List<PhotoResult.DataBean>>> entries = mSortData.entrySet();
+            for (Map.Entry<Integer, List<PhotoResult.DataBean>> entry : entries) {
+                mKeys.add(entry.getKey());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         notifyDataSetChanged();
     }
 

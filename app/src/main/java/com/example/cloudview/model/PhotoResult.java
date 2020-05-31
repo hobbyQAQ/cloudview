@@ -1,8 +1,9 @@
 package com.example.cloudview.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PhotoResult {
+public class PhotoResult implements  Serializable{
 
     /**
      * success : true
@@ -38,7 +39,7 @@ public class PhotoResult {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * id : 1
          * date : 2020-04-20T08:30:48.000+0000

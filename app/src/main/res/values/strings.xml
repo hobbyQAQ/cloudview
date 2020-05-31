@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">CloudView</string>
+    <string name="app_name">云影</string>
     <string name="text_home">首页</string>
     <string name="text_sort">分类</string>
     <string name="text_mine">我</string>
+    <string name="save_path">save path : %s</string>
 </resources>

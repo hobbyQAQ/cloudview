@@ -1,10 +1,16 @@
 package com.example.cloudview.ui.activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import android.Manifest;
 import android.content.Intent;
@@ -12,7 +18,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +26,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.example.cloudview.R;
 import com.example.cloudview.base.BaseFragment;
+import com.example.cloudview.model.bean.PhotoItem;
 import com.example.cloudview.ui.fragment.HomeFragment;
 import com.example.cloudview.ui.fragment.MineFragment;
 import com.example.cloudview.ui.fragment.SearchFragment;
@@ -34,12 +40,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.RuntimePermissions;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private static final int LOAD_ID = 1;
     @BindView(R.id.main_navigation_bar)
     public BottomNavigationBar mBottomNavigationBar;
 
@@ -52,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tv_title)
     public TextView titleTv;
 
+    @BindView(R.id.myToolbar)
+    public Toolbar mToolbar;
+
 
     private HomeFragment mHomeFragment;
     private SearchFragment mSearchFragment;
@@ -59,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private MineFragment mMineFragment;
     private FragmentManager mFm;
     private List<String> mUrls = new ArrayList<>();
+    private List<PhotoItem> mPics = new ArrayList<>();
     private Unbinder mBind;
 
     @Override
@@ -70,19 +79,65 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initEvent();
         initLocalData();
+//        initLoaderManager();
+    }
+    //也可以放到子线程去加载数据
+    private void initLoaderManager() {
+        LoaderManager loaderManager = LoaderManager.getInstance(this);
+        loaderManager.initLoader(LOAD_ID, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+            @NonNull
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+                if (id == LOAD_ID) {
+                    return new CursorLoader(MainActivity.this,MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    ,new String[]{"_data","date_added"},null,null,"date_added desc");
+                }
+                return null;
+            }
+
+            @Override
+            public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+                if (cursor != null) {
+                    String[] cursorNames = cursor.getColumnNames();
+                    while (cursor.moveToNext()){
+                        for (String cursorName : cursorNames) {
+                            LogUtil.d(MainActivity.this,"cursorName"+"==="+cursor.getString(cursor.getColumnIndex(cursorName)));
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
+            }
+        });
     }
 
     private void initLocalData() {
         Cursor cursor = getContentResolver()
                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                        , null, null, null, null);
+                        , new String[]{
+                                MediaStore.Images.Media.DATA,
+                                MediaStore.Images.Media.DISPLAY_NAME,
+                                MediaStore.Images.Media.DATE_ADDED,
+                                MediaStore.Images.Media._ID}
+                                , null
+                        , null
+                        , "date_added desc");
         while (cursor.moveToNext()) {
-            String paths = cursor.getString(cursor.getColumnIndex(MediaStore
-                    .Images.Media.DATA));
-            File file = new File(paths);
-            String absolutePath = file.getAbsolutePath();
-            mUrls.add(absolutePath);
-            Log.d(TAG, "mUrls size == " + mUrls.size());
+            PhotoItem photoItem = new PhotoItem();
+            photoItem.setPath(cursor.getString(0));
+            photoItem.setCreateDate(cursor.getLong(1));
+            photoItem.setName(cursor.getString(2));
+            LogUtil.d(MainActivity.this,photoItem.toString());
+            mPics.add(photoItem);
+//            String paths = cursor.getString(cursor.getColumnIndex(MediaStore
+//                    .Images.Media.DATA));
+//            File file = new File(paths);
+//            String absolutePath = file.getAbsolutePath();
+//            mUrls.add(absolutePath);
         }
         cursor.close();
     }
@@ -106,9 +161,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         String[] tmpList = new String[toApplyList.size()];
-//toArray是集合转数组
+        //toArray是集合转数组
         if (!toApplyList.isEmpty()) {
-            ActivityCompat.requestPermissions(this, toApplyList.toArray(tmpList), 123);
+            ActivityCompat.requestPermissions(this, toApplyList.toArray(tmpList), 1);
         }
 
     }
@@ -133,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        //toolbar的title也跟着改变
         mBottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
@@ -174,14 +229,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initView() {
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
 
         mBottomNavigationBar
                 .addItem(new BottomNavigationItem(R.drawable.selector_home, R.string.text_home))
                 .addItem(new BottomNavigationItem(R.drawable.selector_sort, R.string.text_sort))
                 .addItem(new BottomNavigationItem(R.drawable.selector_mine, R.string.text_mine))
                 .setMode(BottomNavigationBar.MODE_FIXED)
-                .setBarBackgroundColor(R.color.colorPrimary)
+                .setBarBackgroundColor(R.color.color_bottom)
                 .setFirstSelectedPosition(0)
+                .setActiveColor(R.color.colorPrimary)
+                .setInActiveColor(R.color.color_not_selected)
                 .initialise();
         mHomeFragment = new HomeFragment();
         mSortFragment = new SortFragment();
@@ -199,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public List<String> getData() {
-        return mUrls;
+    public List<PhotoItem> getData() {
+        return mPics;
     }
 }

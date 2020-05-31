@@ -25,12 +25,21 @@
                 <Button
                     android:background="@drawable/background_upload_button"
                     android:layout_marginRight="10dp"
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/upload_button"
+                    android:layout_toLeftOf="@id/select_upload_button"
+                    android:id="@+id/quick_upload_button"
                     android:layout_width="80dp"
                     android:layout_height="25dp"
                     android:textSize="15sp"
                     android:text="一键上传"/>
+                <Button
+                    android:background="@drawable/background_upload_button"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/select_upload_button"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:textSize="15sp"
+                    android:text="打开文件夹"/>
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView

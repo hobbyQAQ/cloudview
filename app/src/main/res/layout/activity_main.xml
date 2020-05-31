@@ -4,19 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.MainActivity">
-    <RelativeLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/myToolbar"
         android:background="@color/color_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp">
         <ImageView
             android:id="@+id/iv_search"
             android:src="@mipmap/search_normal"
-            android:layout_margin="10dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
             android:layout_width="30dp"
             android:layout_height="30dp"/>
         <TextView
             android:id="@+id/tv_title"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_home"
@@ -26,13 +28,15 @@
         <ImageView
             android:id="@+id/iv_setting"
             android:src="@mipmap/setting_normal"
-            android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
             android:layout_width="30dp"
             android:layout_height="30dp"/>
-    </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
     <FrameLayout
         android:id="@+id/main_page_content"
+        android:layout_marginVertical="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
@@ -47,6 +51,6 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/main_navigation_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp" />
 
 </RelativeLayout>

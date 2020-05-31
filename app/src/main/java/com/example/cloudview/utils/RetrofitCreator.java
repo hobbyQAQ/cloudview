@@ -17,6 +17,7 @@ public class RetrofitCreator {
     private RetrofitCreator() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(Constants.CONNECT_TIME_OUT, TimeUnit.MILLISECONDS)
+                .readTimeout(Constants.READ_TIME_OUT,TimeUnit.MILLISECONDS)
                 .build();
        mRetrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

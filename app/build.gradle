@@ -9,7 +9,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.example.cloudview"
-        minSdkVersion 26
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -43,4 +43,10 @@ dependencies {
     implementation "org.permissionsdispatcher:permissionsdispatcher:4.7.0"
     annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.7.0"
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //知乎图片选择
+    implementation group: 'com.zhihu.android', name: 'matisse', version: '0.5.3-beta3'
+
+    implementation 'com.leon:lsettingviewlibrary:1.7.0'
+    api project(':imageeditlibrary')
 }

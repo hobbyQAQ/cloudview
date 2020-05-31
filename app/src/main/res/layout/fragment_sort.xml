@@ -1,13 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
+        android:layout_marginLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="sort"/>
+        android:text="通过人脸分类"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/face_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </androidx.recyclerview.widget.RecyclerView>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="通过地点分类"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="福建省 南平市"
+            android:background="@drawable/circle_text_bg"/>
+        <Button
+            android:layout_marginLeft="10dp"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="江西省 南昌市"
+            android:background="@drawable/circle_text_bg"/>
+
+        <Button
+            android:layout_marginLeft="10dp"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="江西省 上饶市"
+            android:background="@drawable/circle_text_bg"/>
+    </LinearLayout>
+
+
 
 </LinearLayout>

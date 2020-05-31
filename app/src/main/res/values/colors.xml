@@ -5,9 +5,11 @@
     <color name="colorAccent">#FFFFFF</color>
     <color name="color_white">#FFFFFF</color>
     <color name="color_head">#AAFFFFFF</color>
+    <color name="color_bottom">#AAFFFFFF</color>
     <color name="color_search_box">#cdcdcd</color>
     <color name="color_blue">#17abe3</color>
     <color name="color_grey">#8a8a8a</color>
     <color name="color_black">#2c2c2c</color>
     <color name="sub_text_title">#515151</color>
+    <color name="color_not_selected">#515151</color>
 </resources>

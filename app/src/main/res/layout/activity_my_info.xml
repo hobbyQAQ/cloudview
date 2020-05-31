@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.MyInfoActivity">
+
+    <LinearLayout
+        android:id="@+id/head_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@color/color_white">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/back_normal" />
+
+        <TextView
+            android:id="@+id/back_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="20sp"
+            android:text="我的资料"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+    <RelativeLayout
+        android:background="@color/color_white"
+        android:id="@+id/item_my_icon"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:textStyle="bold"
+            android:text="头像"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginRight="50dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:background="@color/color_white"
+        android:id="@+id/item_my_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:text="昵称"/>
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="HappyMan"
+            android:layout_width="100dp"
+            android:layout_height="20dp"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/item_my_gender"
+        android:background="@color/color_white"
+
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:text="性别"/>
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="男"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/delete"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/item_my_birthday"
+        android:background="@color/color_white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:text="生日"/>
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="1999-10-12"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/delete"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/item_my_position"
+        android:background="@color/color_white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:text="地区"/>
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="福建省 南平市"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/delete"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/item_my_motto"
+        android:background="@color/color_white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:text="签名"/>
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="我是全是界最sao的sao猪"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/delete"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -59,8 +59,12 @@ public abstract class BaseFragment extends Fragment {
         initView();
         initPresenter();
         loadData();
-
+        initListener();
         return rootView;
+    }
+
+    protected  void initListener(){
+
     }
 
     /**
