@@ -32,4 +32,7 @@ public interface PhotoService {
     @Multipart
     @POST("photo/upload")
     Call<UploadResult> postFile(@Part MultipartBody.Part file,@Query("uid")Integer uid);
+
+    @GET("photo/get/by/face")
+    Call<PhotoResult> getPhotoListByCid(@Query("cid")Integer cid);
 }

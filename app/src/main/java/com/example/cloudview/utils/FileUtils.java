@@ -164,8 +164,9 @@ public class FileUtils {
     }
 
     public static File genEditFile(){
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMdd_HHmmss");
         return FileUtils.getEmptyFile("IMG_"
-                + new SimpleDateFormat("YYYYMMdd_HHmmss")
+                + sdf.format(new Date())
                 + ".png");
     }
 

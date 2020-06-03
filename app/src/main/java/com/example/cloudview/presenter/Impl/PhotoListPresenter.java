@@ -187,6 +187,43 @@ public class PhotoListPresenter implements IPhotoListPresenter {
         });
     }
 
+    @Override
+    public void getPhotoListByCid(Integer cid) {
+        //更新加载界面
+        for (IPhotoListCallback callback : mCallbacks) {
+            callback.onLoading();
+        }
+        Retrofit retrofit = RetrofitCreator.getInstance().getRetrofit();
+        PhotoService photoService = retrofit.create(PhotoService.class);
+        Call<PhotoResult> task = photoService.getPhotoListByCid(cid);
+        task.enqueue(new Callback<PhotoResult>() {
+            @Override
+            public void onResponse(Call<PhotoResult> call, Response<PhotoResult> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    PhotoResult body = response.body();
+                    if (body.getData() != null) {
+                        for (IPhotoListCallback callback : mCallbacks) {
+                            callback.onPhotoListLoad(body.getData());
+                        }
+                    }else{
+                        for (IPhotoListCallback callback : mCallbacks) {
+                            callback.onEmpty();
+                        }
+                    }
+
+                    LogUtil.d(PhotoListPresenter.this,body.toString());
+                }
+            }
+            @Override
+            public void onFailure(Call<PhotoResult> call, Throwable t) {
+                t.printStackTrace();
+                for (IPhotoListCallback callback : mCallbacks) {
+                    callback.onError();
+                }
+            }
+        });
+    }
+
     /**
      * 写文件到sd卡，需要异步执行
      * @param response

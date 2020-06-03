@@ -1,5 +1,6 @@
 package com.example.cloudview.ui.adapter;
 
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.cloudview.R;
 import com.example.cloudview.model.PhotoResult;
@@ -37,7 +40,9 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Inne
     @Override
     public InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo_list, parent, false);
-        return new InnerHolder(itemView);
+        InnerHolder innerHolder = new InnerHolder(itemView);
+        innerHolder.setIsRecyclable(false);
+        return innerHolder;
     }
 
     @Override
@@ -62,8 +67,18 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Inne
         LogUtil.d(PhotoListAdapter.this,"开始位置 ==== "+mStartPosition+"");
         photoGridListAdapter.setAllPhoto(mData);
         gridList.setAdapter(photoGridListAdapter);
-
+        gridList.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                outRect.top = 8;
+                outRect.bottom = 8;
+                outRect.left = 8;
+                outRect.right = 8;
+            }
+        });
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),4,RecyclerView.VERTICAL,false);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
+//        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         gridList.setLayoutManager(gridLayoutManager);
 
 

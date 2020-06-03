@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -74,7 +75,6 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
 
     private String mEditPath;
     private Uri photoURI = null;
-    private View mTakenPhoto;//拍摄照片用于编辑
     private Bitmap mainBitmap;
     private int imageWidth, imageHeight;//
     private PhotoItem mPhoto;
@@ -83,6 +83,9 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_image);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        imageWidth = metrics.widthPixels;
+        imageHeight = metrics.heightPixels;
         mPhoto = (PhotoItem) getIntent().getSerializableExtra("photo");
         mBind = ButterKnife.bind(this);
         mEditPath = mPhoto.getPath();
@@ -146,7 +149,7 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View v) {
                 takePhotoClick();
-                Toast.makeText(LocalImageActivity.this, "你上传了拍照按钮", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LocalImageActivity.this, "你上传了拍照按钮", Toast.LENGTH_SHORT).show();
             }
         });
     }

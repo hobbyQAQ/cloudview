@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.CharaterActivity">
+    <LinearLayout
+        android:id="@+id/back_container"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:src="@mipmap/back_normal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="返回" />
+    </LinearLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/face_cover"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/back_container"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/camera"
+        />
+    <TextView
+        android:id="@+id/hhhhh"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_below="@id/back_container"
+        android:layout_toRightOf="@id/face_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="他是谁？点击选择一张封面"/>
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_below="@id/hhhhh"
+        android:layout_toRightOf="@id/face_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-------吴宇斌"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/face_cover"
+        android:id="@+id/charater_photo_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+</RelativeLayout>

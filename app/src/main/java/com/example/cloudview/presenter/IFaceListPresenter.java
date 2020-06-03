@@ -10,10 +10,10 @@ public interface IFaceListPresenter extends IBasePresenter<IFaceListCallback> {
      */
     void getPhotoListByUserId(int id);
 
+
     /**
-     *  根据uid获取人脸
+     * 根据uid获取人脸
+     * @param i
      */
-    void getFaceListByUid(int uid);
-
-
+    void getSortFaceByUid(int i);
 }

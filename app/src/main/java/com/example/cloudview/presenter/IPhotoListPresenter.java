@@ -49,6 +49,11 @@ public interface IPhotoListPresenter extends IBasePresenter<IPhotoListCallback> 
     void download(int pid, File picFilePath);
 
     /**
+     * 通过cid获取人物的所有照片
+     */
+    void getPhotoListByCid(Integer cid);
+
+    /**
      *
      */
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cloudview.R;
 import com.example.cloudview.base.BaseFragment;
 import com.example.cloudview.model.FaceResult;
+import com.example.cloudview.model.SortFaceResult;
 import com.example.cloudview.presenter.Impl.FaceListPresneter;
 import com.example.cloudview.ui.adapter.FaceListAdapter;
 import com.example.cloudview.view.IFaceListCallback;
@@ -59,13 +60,10 @@ public class SortFragment extends BaseFragment implements IFaceListCallback {
 
     @Override
     protected void loadData() {
-        mFaceListPresneter.getFaceListByUid(1);
+        mFaceListPresneter.getSortFaceByUid(1);
     }
 
-    @Override
-    public void onFaceListLoad(List<FaceResult.DataBean> faceList) {
-        mFaceListAdapter.setData(faceList);
-    }
+
 
     @Override
     public void onError() {
@@ -85,5 +83,10 @@ public class SortFragment extends BaseFragment implements IFaceListCallback {
     @Override
     public void onLoading() {
 
+    }
+
+    @Override
+    public void onFaceListLoad(List<SortFaceResult.DataBean> photoList) {
+        mFaceListAdapter.setData(photoList);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cloudview.ui.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,13 @@ import com.bumptech.glide.Glide;
 import com.example.cloudview.R;
 import com.example.cloudview.model.FaceResult;
 import com.example.cloudview.model.PhotoResult;
+import com.example.cloudview.model.SortFaceResult;
+import com.example.cloudview.ui.activity.CharaterActivity;
 import com.example.cloudview.utils.DateUtils;
 import com.example.cloudview.utils.LogUtil;
 import com.example.cloudview.utils.UrlUtils;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FaceListAdapter extends RecyclerView.Adapter<FaceListAdapter.InnerHolder> {
     //人脸数据
-    private List<FaceResult.DataBean> mData = new ArrayList<>();
+    private List<SortFaceResult.DataBean> mData = new ArrayList<>();
 
 
     @NonNull
@@ -43,8 +47,20 @@ public class FaceListAdapter extends RecyclerView.Adapter<FaceListAdapter.InnerH
         View itemView = holder.itemView;
 //        ImageView photoCoverIv = view.findViewById(R.id.photo_cover_iv);
         CircleImageView faceIv = itemView.findViewById(R.id.face_iv);
-        String url = UrlUtils.path2Url(mData.get(position).getPath());
+        TextView nameTv = itemView.findViewById(R.id.face_name);
+        nameTv.setText(mData.get(position).getName());
+        String url = UrlUtils.path2Url(mData.get(position).getFacelist().get(0).getPath());
         Glide.with(itemView.getContext()).load(url).into(faceIv);
+        faceIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(itemView.getContext(), CharaterActivity.class);
+                intent.putExtra("cid",mData.get(position).getCid());
+                intent.putExtra("name",mData.get(position).getName());
+                intent.putExtra("faces",(Serializable) mData.get(position).getFacelist());
+                itemView.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -52,7 +68,7 @@ public class FaceListAdapter extends RecyclerView.Adapter<FaceListAdapter.InnerH
         return mData.size();
     }
 
-    public void setData(List<FaceResult.DataBean> faceList) {
+    public void setData(List<SortFaceResult.DataBean> faceList) {
         mData.clear();
         mData.addAll(faceList);
         notifyDataSetChanged();

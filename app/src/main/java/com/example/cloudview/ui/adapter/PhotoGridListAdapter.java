@@ -14,11 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.cloudview.R;
 import com.example.cloudview.model.PhotoResult;
 import com.example.cloudview.ui.activity.PhotoActivity;
 import com.example.cloudview.utils.LogUtil;
 import com.example.cloudview.utils.UrlUtils;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,17 +45,33 @@ public class PhotoGridListAdapter extends RecyclerView.Adapter<PhotoGridListAdap
     @Override
     public InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_small_online_photo, parent, false);
+        InnerHolder innerHolder = new InnerHolder(view);
+        innerHolder.setIsRecyclable(false);
+        return innerHolder;
+    }
 
-        return new InnerHolder(view);
+    @Override
+    public void onViewRecycled(@NonNull InnerHolder holder) {
+        super.onViewRecycled(holder);
+        if (holder != null) {
+            if (holder != null) {
+                Glide.with(holder.itemView.getContext()).clear(holder.itemView);
+            }
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
         View itemView = holder.itemView;
         ImageView cover = itemView.findViewById(R.id.small_online_photo_cover);
+
         String url = UrlUtils.path2Url(mData.get(position).getPath());
-        LogUtil.d(PhotoGridListAdapter.this,"url:"+url);
-        Glide.with(itemView.getContext()).load(url).into(cover);
+        cover.setTag(R.id.small_online_photo_cover,position);
+            LogUtil.d(PhotoGridListAdapter.this,"url:"+url);
+//        Picasso.with(itemView.getContext()).load(url).into(cover);
+        Glide.with(itemView.getContext())
+                .load(url)
+                .into(cover);
         cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
