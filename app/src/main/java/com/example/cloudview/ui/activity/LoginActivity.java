@@ -59,7 +59,9 @@ public class LoginActivity extends AppCompatActivity {
                         LogUtil.d(LoginActivity.this,userResult.toString());
                         if (userResult != null && userResult.isSuccess()) {
                             //把用户信息保存到SharePrefrecence里面
-                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            intent.putExtra("user",userResult.getData());
+                            startActivity(intent);
                             // TODO: 2020/6/3 之后MainActivity 的返回界面不是LoginActivity
 
                         }else{
@@ -71,8 +73,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<UserResult> call, Throwable t) {
                             //网络错误的逻辑
+                        Toast.makeText(LoginActivity.this, "服务器没开，或网络未连接", Toast.LENGTH_SHORT).show();
                     }
                 });
+
             }
         });
         register_button.setOnClickListener(new View.OnClickListener() {

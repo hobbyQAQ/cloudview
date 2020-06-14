@@ -1,5 +1,7 @@
 package com.example.cloudview.model;
 
+import java.io.Serializable;
+
 public class UserResult {
 
     /**
@@ -45,7 +47,7 @@ public class UserResult {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         @Override
         public String toString() {
             return "DataBean{" +
@@ -69,7 +71,7 @@ public class UserResult {
         private String account;
         private String password;
         private String nickname;
-        private Object coverPath;
+        private String coverPath;
 
         public int getId() {
             return id;
@@ -103,11 +105,11 @@ public class UserResult {
             this.nickname = nickname;
         }
 
-        public Object getCoverPath() {
+        public String getCoverPath() {
             return coverPath;
         }
 
-        public void setCoverPath(Object coverPath) {
+        public void setCoverPath(String coverPath) {
             this.coverPath = coverPath;
         }
     }

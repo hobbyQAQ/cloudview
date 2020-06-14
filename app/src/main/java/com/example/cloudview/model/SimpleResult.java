@@ -1,6 +1,6 @@
 package com.example.cloudview.model;
 
-public class UploadResult {
+public class SimpleResult {
     /**
      * success : true
      * msg : 上传文件成功
@@ -13,7 +13,7 @@ public class UploadResult {
 
     @Override
     public String toString() {
-        return "UploadResult{" +
+        return "SimpleResult{" +
                 "success=" + success +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +

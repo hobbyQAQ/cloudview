@@ -13,6 +13,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
+
+import com.xinlan.imageeditlibrary.editimage.utils.FileUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -191,6 +194,7 @@ public class FileUtils {
         File file;
         try {
             file = new File(path);
+
         } catch (NullPointerException e) {
             return false;
         }

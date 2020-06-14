@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.example.cloudview.Api.PhotoService;
 import com.example.cloudview.base.BaseApplication;
 import com.example.cloudview.model.PhotoResult;
-import com.example.cloudview.model.UploadResult;
+import com.example.cloudview.model.SimpleResult;
 import com.example.cloudview.model.bean.PhotoItem;
 import com.example.cloudview.presenter.IPhotoListPresenter;
 import com.example.cloudview.utils.FileUtils;
@@ -116,18 +116,18 @@ public class PhotoListPresenter implements IPhotoListPresenter {
         Retrofit retrofit = RetrofitCreator.getInstance().getRetrofit();
         PhotoService photoService = retrofit.create(PhotoService.class);
         MultipartBody.Part file =getPart("file",photoItem.getPath());
-        Call<UploadResult> task = photoService.postFile(file,1);
-        task.enqueue(new Callback<UploadResult>() {
+        Call<SimpleResult> task = photoService.postFile(file,1);
+        task.enqueue(new Callback<SimpleResult>() {
             @Override
-            public void onResponse(Call<UploadResult> call,Response<UploadResult> response) {
+            public void onResponse(Call<SimpleResult> call, Response<SimpleResult> response) {
                 //
-                Log.d("UploadResult","文件上传结果" + response.body());
+                Log.d("SimpleResult","文件上传结果" + response.body());
                 Toast.makeText(BaseApplication.getContext(), "上传成功", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<UploadResult> call,Throwable t) {
-                Log.d("UploadResult","onFailure -- > 文件上传失败 ---> " + t.toString());
+            public void onFailure(Call<SimpleResult> call, Throwable t) {
+                Log.d("SimpleResult","onFailure -- > 文件上传失败 ---> " + t.toString());
                 Toast.makeText(BaseApplication.getContext(), "上传失败", Toast.LENGTH_SHORT).show();
 
             }
@@ -150,17 +150,17 @@ public class PhotoListPresenter implements IPhotoListPresenter {
         for (Uri path : paths) {
             files.add(getPart("files", FileUtils.getFilePathByUri(BaseApplication.getContext(),path)));
         }
-        Call<UploadResult> task = photoService.postFiles(files,1);
-        task.enqueue(new Callback<UploadResult>() {
+        Call<SimpleResult> task = photoService.postFiles(files,1);
+        task.enqueue(new Callback<SimpleResult>() {
             @Override
-            public void onResponse(Call<UploadResult> call,Response<UploadResult> response) {
+            public void onResponse(Call<SimpleResult> call, Response<SimpleResult> response) {
                 //
-                Log.d("UploadResult","多文件上传结果" + response.body());
+                Log.d("SimpleResult","多文件上传结果" + response.body());
             }
 
             @Override
-            public void onFailure(Call<UploadResult> call,Throwable t) {
-                Log.d("UploadResult","onFailure -- > 多文件上传失败 ---> " + t.toString());
+            public void onFailure(Call<SimpleResult> call, Throwable t) {
+                Log.d("SimpleResult","onFailure -- > 多文件上传失败 ---> " + t.toString());
             }
         });
     }

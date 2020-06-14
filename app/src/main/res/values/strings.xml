@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">云影</string>
-    <string name="text_home">首页</string>
-    <string name="text_sort">分类</string>
-    <string name="text_mine">我</string>
-    <string name="save_path">save path : %s</string>
+    <string name="app_name" translatable="false">编辑图片</string>
+    <string name="text_home" translatable="false">首页</string>
+    <string name="text_sort" translatable="false">分类</string>
+    <string name="text_mine" translatable="false">我</string>
+    <string name="save_path" translatable="false">save path : %s</string>
+    <string name="my_app_name" translatable="false">cloudview</string>
 </resources>

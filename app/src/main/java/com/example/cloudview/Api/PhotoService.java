@@ -1,10 +1,7 @@
 package com.example.cloudview.Api;
 
-import android.content.Intent;
-
-import com.example.cloudview.model.DownloadResult;
 import com.example.cloudview.model.PhotoResult;
-import com.example.cloudview.model.UploadResult;
+import com.example.cloudview.model.SimpleResult;
 
 import java.util.List;
 
@@ -16,7 +13,6 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 public interface PhotoService {
     @GET("photo/get")
@@ -27,12 +23,21 @@ public interface PhotoService {
 
     @Multipart
     @POST("photo/uploads")
-    Call<UploadResult> postFiles(@Part List<MultipartBody.Part> files,@Query("uid")Integer uid);
+    Call<SimpleResult> postFiles(@Part List<MultipartBody.Part> files, @Query("uid")Integer uid);
 
     @Multipart
     @POST("photo/upload")
-    Call<UploadResult> postFile(@Part MultipartBody.Part file,@Query("uid")Integer uid);
+    Call<SimpleResult> postFile(@Part MultipartBody.Part file, @Query("uid")Integer uid);
 
     @GET("photo/get/by/face")
     Call<PhotoResult> getPhotoListByCid(@Query("cid")Integer cid);
+
+    @GET("photo/search")
+    Call<PhotoResult> getPhotoListByKeyword(@Query("keyword")String keyword, @Query("uid")int id);
+    @GET("photo/get/loves")
+    Call<PhotoResult> getLoves(@Query("uid")int uid);
+
+
+    @GET("photo/add/love")
+    Call<SimpleResult> addLove(@Query("pid")int pid, @Query("uid")int uid);
 }

@@ -16,7 +16,7 @@ public class DownloadResult {
 
     @Override
     public String toString() {
-        return "UploadResult{" +
+        return "SimpleResult{" +
                 "success=" + success +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +

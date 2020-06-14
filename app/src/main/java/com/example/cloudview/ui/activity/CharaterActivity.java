@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -47,6 +48,9 @@ public class CharaterActivity extends AppCompatActivity implements IPhotoListCal
 
     @BindView(R.id.face_cover)
     CircleImageView faceCover;
+
+    @BindView(R.id.charater_name)
+    TextView charaterTv;
     private int mCid;
 
 
@@ -60,6 +64,7 @@ public class CharaterActivity extends AppCompatActivity implements IPhotoListCal
         mCid = getIntent().getIntExtra("cid",1);
         String name = getIntent().getStringExtra("name");
         mCharater = new SortFaceResult.DataBean(mCid,name,faces);
+        charaterTv.setText(mCharater.getName());
         Glide.with(this).load(UrlUtils.path2Url(mCharater.getFacelist().get(0).getPath())).into(faceCover);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
         layoutManager1.setOrientation(RecyclerView.VERTICAL);

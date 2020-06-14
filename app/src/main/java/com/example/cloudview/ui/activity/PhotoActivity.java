@@ -12,10 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.cloudview.Api.PhotoService;
 import com.example.cloudview.R;
+import com.example.cloudview.base.BaseApplication;
 import com.example.cloudview.model.PhotoResult;
+import com.example.cloudview.model.SimpleResult;
 import com.example.cloudview.presenter.Impl.PhotoListPresenter;
 import com.example.cloudview.ui.adapter.PhotoPagerAdapter;
+import com.example.cloudview.utils.LogUtil;
+import com.example.cloudview.utils.RetrofitCreator;
 import com.example.cloudview.view.IPhotoListCallback;
 
 import java.io.File;
@@ -24,8 +29,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
-public class PhotoActivity  extends AppCompatActivity implements IPhotoListCallback {
+public class PhotoActivity  extends AppCompatActivity implements IPhotoListCallback, PhotoPagerAdapter.OnPagerChangerListener {
 
     private Unbinder mBind;
 
@@ -68,11 +77,18 @@ public class PhotoActivity  extends AppCompatActivity implements IPhotoListCallb
         if (mPhotoPagerAdapter != null) {
             mPhotoPagerAdapter.setData(mPhotos);
         }
+        if (mPhotos != null) {
+            if (mPhotos.get(mPhotoPager.getCurrentItem()).getLove() == 1) {
+                mLoveBtn.setImageResource(R.mipmap.love_check);
+            }
+        }
         mPhotoPager.setAdapter(mPhotoPagerAdapter);
         mPhotoPager.setCurrentItem(mPosition);
         initListener();
         mPhotoListPresenter = PhotoListPresenter.getInstance();
         mPhotoListPresenter.registerCallback(this);
+
+        mPhotoPagerAdapter.setListener(this);
     }
 
     /**
@@ -91,13 +107,51 @@ public class PhotoActivity  extends AppCompatActivity implements IPhotoListCallb
             public void onClick(View v) {
                 //执行层操作，执行层控制UI层工作
                 
-                File picFilePath = PhotoActivity.this.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                File picFilePath = new File("/storage/emulated/0/Pictures/cloudview");
                 if (mPhotoListPresenter != null) {
                     mPhotoListPresenter.download(mPhotos.get(mPosition).getId(),picFilePath);
                 }
                 Toast.makeText(PhotoActivity.this, "正在下载", Toast.LENGTH_LONG).show();
             }
         });
+        mLoveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Retrofit retrofit = RetrofitCreator.getInstance().getRetrofit();
+                PhotoService photoService = retrofit.create(PhotoService.class);
+                Call<SimpleResult> task = photoService.addLove(mPhotos.get(mPhotoPager.getCurrentItem()).getId(), BaseApplication.getUser().getId());
+                task.enqueue(new Callback<SimpleResult>() {
+                    @Override
+                    public void onResponse(Call<SimpleResult> call, Response<SimpleResult> response) {
+                        SimpleResult body = response.body();
+                        LogUtil.d(PhotoActivity.this,body.toString());
+                        if (body != null) {
+                            Toast.makeText(PhotoActivity.this, body.getMsg(), Toast.LENGTH_SHORT).show();
+                            handleAddLoveSuccess();
+                        }else{
+                            Toast.makeText(PhotoActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SimpleResult> call, Throwable t) {
+                        Toast.makeText(PhotoActivity.this, "请求失败，网络错误", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void handleAddLoveSuccess() {
+        PhotoResult.DataBean photo = mPhotos.get(mPhotoPager.getCurrentItem());
+        if (photo.getLove() == 0) {
+            photo.setLove(1);
+            mLoveBtn.setImageResource(R.mipmap.love_check);
+        }else{
+            photo.setLove(0);
+            mLoveBtn.setImageResource(R.mipmap.love);
+        }
     }
 
 
@@ -160,5 +214,16 @@ public class PhotoActivity  extends AppCompatActivity implements IPhotoListCallb
     @Override
     public void onLoading() {
 
+    }
+
+    @Override
+    public void onPagerChange() {
+        int position = mPhotoPager.getCurrentItem();
+        PhotoResult.DataBean dataBean = mPhotos.get(position);
+        if (dataBean.getLove() == 0) {
+            mLoveBtn.setImageResource(R.mipmap.love);
+        }else{
+            mLoveBtn.setImageResource(R.mipmap.love_check);
+        }
     }
 }

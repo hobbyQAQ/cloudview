@@ -49,13 +49,14 @@ public class PhotoResult implements  Serializable{
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * id : 1
          * date : 2018-02-15T11:14:34.000+0000
          * location : null
          * path : photo/1/IMG_20180215_191434.jpg
          * type : 1
+         * love: 0
          */
 
         private int id;
@@ -63,6 +64,7 @@ public class PhotoResult implements  Serializable{
         private Object location;
         private String path;
         private int type;
+        private int love;
 
         @Override
         public String toString() {
@@ -72,7 +74,16 @@ public class PhotoResult implements  Serializable{
                     ", location=" + location +
                     ", path='" + path + '\'' +
                     ", type=" + type +
+                    ", love=" + love +
                     '}';
+        }
+
+        public int getLove() {
+            return love;
+        }
+
+        public void setLove(int love) {
+            this.love = love;
         }
 
         public int getId() {

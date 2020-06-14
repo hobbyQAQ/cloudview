@@ -1,17 +1,14 @@
 package com.example.cloudview.ui.adapter;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
-import com.example.cloudview.R;
 import com.example.cloudview.model.PhotoResult;
-import com.example.cloudview.utils.DateUtils;
+import com.example.cloudview.model.bean.PhotoItem;
 import com.example.cloudview.utils.UrlUtils;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -19,14 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PhotoPagerAdapter extends PagerAdapter {
+public class ImagePagerAdapter extends PagerAdapter {
 
-    private ArrayList<PhotoResult.DataBean> mData = new ArrayList<>();
-    private OnPagerChangerListener mListener;
-
-    public void setListener(OnPagerChangerListener listener){
-        mListener = listener;
-    }
+    private ArrayList<PhotoItem> mData = new ArrayList<>();
 
     @NonNull
     @Override
@@ -34,10 +26,8 @@ public class PhotoPagerAdapter extends PagerAdapter {
         PhotoView photoView = new PhotoView(container.getContext());
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         photoView.setLayoutParams(layoutParams);
-        String url = UrlUtils.path2Url(mData.get(position).getPath());
-        Glide.with(container.getContext()).load(url).into(photoView);
+        Glide.with(container.getContext()).load(mData.get(position).getPath()).into(photoView);
         container.addView(photoView);
-        mListener.onPagerChange();
         return photoView;
     }
 
@@ -56,18 +46,9 @@ public class PhotoPagerAdapter extends PagerAdapter {
         container.removeView((View)object);
     }
 
-
-
-    public void setData(List<PhotoResult.DataBean> list) {
+    public void setData(List<PhotoItem> list) {
         mData.clear();
         mData.addAll(list);
         notifyDataSetChanged();
     }
-
-
-
-    public interface OnPagerChangerListener {
-        void onPagerChange();
-    }
-
 }

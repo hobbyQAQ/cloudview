@@ -25,7 +25,9 @@ import android.widget.TextView;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.example.cloudview.R;
+import com.example.cloudview.base.BaseApplication;
 import com.example.cloudview.base.BaseFragment;
+import com.example.cloudview.model.UserResult;
 import com.example.cloudview.model.bean.PhotoItem;
 import com.example.cloudview.ui.fragment.HomeFragment;
 import com.example.cloudview.ui.fragment.MineFragment;
@@ -70,11 +72,16 @@ public class MainActivity extends AppCompatActivity {
     private List<PhotoItem> mPics = new ArrayList<>();
     private Unbinder mBind;
 
+    private UserResult.DataBean mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mBind = ButterKnife.bind(this);
+        //用户登录后获取用户信息
+        mUser = (UserResult.DataBean)getIntent().getSerializableExtra("user");
+        ((BaseApplication)getApplication()).setUser(mUser);
         initPermission();
         initView();
         initEvent();
@@ -131,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             photoItem.setPath(cursor.getString(0));
             photoItem.setCreateDate(cursor.getLong(1));
             photoItem.setName(cursor.getString(2));
-            LogUtil.d(MainActivity.this,photoItem.toString());
+//            LogUtil.d(MainActivity.this,photoItem.toString());
             mPics.add(photoItem);
 //            String paths = cursor.getString(cursor.getColumnIndex(MediaStore
 //                    .Images.Media.DATA));
@@ -203,7 +210,9 @@ public class MainActivity extends AppCompatActivity {
                         titleTv.setText(R.string.text_sort);
                         break;
                     case 2:
-                        switchFragment(mMineFragment);
+                        FragmentTransaction fragmentTransaction = mFm.beginTransaction();
+                        fragmentTransaction.replace(R.id.main_page_content, mMineFragment);
+                        fragmentTransaction.commit();
                         titleTv.setText(R.string.text_mine);
                         break;
                 }

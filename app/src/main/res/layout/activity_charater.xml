@@ -42,13 +42,14 @@
         android:layout_height="wrap_content"
         android:text="他是谁？点击选择一张封面"/>
     <TextView
+        android:id="@+id/charater_name"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:layout_below="@id/hhhhh"
         android:layout_toRightOf="@id/face_cover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="-------吴宇斌"/>
+        android:text="      未命名"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="10dp"

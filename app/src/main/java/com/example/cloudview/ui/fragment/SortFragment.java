@@ -36,7 +36,8 @@ public class SortFragment extends BaseFragment implements IFaceListCallback {
     protected void initView() {
         mFaceListAdapter = new FaceListAdapter();
         mFaceListView.setAdapter(mFaceListAdapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(),4);
+        GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(),3);
+
 //        mFaceListView.addItemDecoration(new RecyclerView.ItemDecoration() {
 //            @Override
 //            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {

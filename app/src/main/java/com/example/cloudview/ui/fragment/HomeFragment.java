@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,12 +55,17 @@ public class HomeFragment extends BaseFragment implements IPhotoListCallback {
     @BindView(R.id.quick_upload_button)
     public Button mQuickButton;
 
+    @BindView(R.id.change_sort_way)
+    public ImageView mChangeSortWay;
+
     private List<PhotoItem> mPics = new ArrayList<>();
     private PhotoListPresenter mPhotoListPresenter;
     private PhotoListAdapter mPhotoListAdapter;
     List<Uri> mSelectedPhoto = new ArrayList<>();
     private LocalAlbumAdapter mLocalAlbumAdapter;
     private List<PhotoItem> mPhotoUploads = new ArrayList<>();
+    private LinearLayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager1;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -97,11 +103,25 @@ public class HomeFragment extends BaseFragment implements IPhotoListCallback {
 
     @Override
     protected void initListener() {
+        mChangeSortWay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLayoutManager1.getReverseLayout() == true) {
+                    mLayoutManager1.setReverseLayout(false);
+                }else{
+                    mLayoutManager1.setReverseLayout(true);
+                }
+
+            }
+        });
         mQuickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 mPhotoUploads = mLocalAlbumAdapter.getSelected();
+                if (mPhotoUploads.size() == 0) {
+                    Toast.makeText(getContext(), "长按本地图片选择上传", Toast.LENGTH_SHORT).show();
+                }
                 for (PhotoItem photoUpload : mPhotoUploads) {
                     mSelectedPhoto.contains(new File(photoUpload.getPath()).toURI());
                 }
@@ -130,19 +150,19 @@ public class HomeFragment extends BaseFragment implements IPhotoListCallback {
 
     @Override
     protected void initView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         mLocalAlbumAdapter = new LocalAlbumAdapter();
         mLocalList.setAdapter(mLocalAlbumAdapter);
-        mLocalList.setLayoutManager(layoutManager);
+        mLocalList.setLayoutManager(mLayoutManager);
         //解决每9个Item就会重复显示状态问题
         mLocalList.setItemViewCacheSize(500);
 
         if (mPics != null) {
             mLocalAlbumAdapter.setData(mPics);
         }
-        LinearLayoutManager layoutManager1 = new LinearLayoutManager(getContext());
-        layoutManager1.setOrientation(RecyclerView.VERTICAL);
+        mLayoutManager1 = new LinearLayoutManager(getContext());
+        mLayoutManager1.setOrientation(RecyclerView.VERTICAL);
         mPhotoList.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -150,7 +170,7 @@ public class HomeFragment extends BaseFragment implements IPhotoListCallback {
                 outRect.bottom = 8;
             }
         });
-        mPhotoList.setLayoutManager(layoutManager1);
+        mPhotoList.setLayoutManager(mLayoutManager1);
         mPhotoListAdapter = new PhotoListAdapter();
         mPhotoList.setAdapter(mPhotoListAdapter);
 

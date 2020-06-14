@@ -22,6 +22,7 @@ import com.example.cloudview.utils.LogUtil;
 import com.example.cloudview.utils.UrlUtils;
 import com.github.chrisbanes.photoview.PhotoView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,8 @@ public class LocalAlbumAdapter extends RecyclerView.Adapter<LocalAlbumAdapter.In
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("com.cloudview.action.GPU_IMAGE_ACTION");
-                intent.putExtra("photo",mData.get(position));
+                intent.putExtra("photos", (Serializable) mData);
+                intent.putExtra("position",position);
                 itemView.getContext().startActivity(intent);
             }
         });

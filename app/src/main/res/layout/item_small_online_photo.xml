@@ -6,7 +6,6 @@
         android:id="@+id/small_online_photo_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="1dp"
         android:scaleType="centerCrop"
         android:src="@mipmap/delete" />
 <!--    <View-->
