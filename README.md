@@ -1,9 +1,32 @@
 # 智能分类云相册
 ### 一、界面展示
 
-![1622524214553](C:\Users\94244\AppData\Roaming\Typora\typora-user-images\1622524214553.png)
+<img src="https://i.loli.net/2021/06/01/u7GwD1tvEXhryRY.jpg" alt="Screenshot_2021-05-28-15-46-39-155_com.example.cl.jpg" style="zoom:25%;" />
 
-<img src="C:\Users\94244\AppData\Roaming\Typora\typora-user-images\1622524254403.png" alt="1622524254403" style="zoom:67%;" />
+
+
+<img src="https://i.loli.net/2021/06/01/1iVgDQyZTjE5wfR.jpg" alt="Screenshot_2021-05-28-15-46-47-828_com.example.cl.jpg" style="zoom:25%;" />
+
+
+
+<img src="https://i.loli.net/2021/06/01/8jSMd5KJqvplI1N.jpg" alt="Screenshot_2021-05-28-15-46-56-412_com.example.cl.jpg" style="zoom:25%;" />
+
+
+
+<img src="https://i.loli.net/2021/06/01/aBdCUOWk3vfyjl8.jpg" alt="Screenshot_2021-05-28-15-47-36-598_com.example.cl.jpg" style="zoom:25%;" />
+
+​	图像详情界面内有图片的具体操作，图片识别也是在那完成的。
+
+<img src="https://i.loli.net/2021/06/01/73MyZuA1lh6SLpi.jpg" alt="Screenshot_2021-05-28-15-48-41-284_com.example.cl.jpg" style="zoom:25%;" />
+
+
+
+<img src="https://i.loli.net/2021/06/01/EKcxMG18Ypbi92o.jpg" alt="Screenshot_2021-05-28-16-11-11-374_com.example.cl.jpg" style="zoom:25%;" />
+
+
+
+<img src="https://i.loli.net/2021/06/01/ySAzpdwDeB7MGbm.jpg" alt="Screenshot_2021-05-28-16-11-21-544_android.jpg" style="zoom:25%;" />
+
 
 图像详情界面内有图片的具体操作，图片识别也是在那完成的。
 
