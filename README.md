@@ -1,9 +1,8 @@
 # 智能分类云相册
 ### 一、界面展示
 ![3GGW_@3F_I_XKMGEHE_QB_G.png](https://i.loli.net/2021/06/01/1DjpEC9LhX5Ao27.png)
+
 主界面、分类界面、搜索界面、图片详情
-![6__LU_V2L7H_1C88_PDVECO.png](https://i.loli.net/2021/06/01/5K1RnvU4pyXPLFb.png)
-编辑图片、拍照
 
 
 图像详情界面内有图片的具体操作，图片识别也是在那完成的。
