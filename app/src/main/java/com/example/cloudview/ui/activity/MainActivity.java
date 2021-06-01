@@ -18,9 +18,11 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -73,6 +75,27 @@ public class MainActivity extends AppCompatActivity {
     private Unbinder mBind;
 
     private UserResult.DataBean mUser;
+    private Long exitTime;
+
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序",
+                        Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +111,19 @@ public class MainActivity extends AppCompatActivity {
         initLocalData();
 //        initLoaderManager();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initLocalData();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initLocalData();
+    }
+
     //也可以放到子线程去加载数据
     private void initLoaderManager() {
         LoaderManager loaderManager = LoaderManager.getInstance(this);
@@ -122,7 +158,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
+
+    /**
+     * 初始化本地图片数据
+     */
     private void initLocalData() {
+        LogUtil.d(MainActivity.this,"initLocalData........");
         Cursor cursor = getContentResolver()
                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                         , new String[]{
@@ -136,41 +179,30 @@ public class MainActivity extends AppCompatActivity {
         while (cursor.moveToNext()) {
             PhotoItem photoItem = new PhotoItem();
             photoItem.setPath(cursor.getString(0));
-            photoItem.setCreateDate(cursor.getLong(1));
+            photoItem.setCreateDate(cursor.getString(1));
             photoItem.setName(cursor.getString(2));
-//            LogUtil.d(MainActivity.this,photoItem.toString());
             mPics.add(photoItem);
-//            String paths = cursor.getString(cursor.getColumnIndex(MediaStore
-//                    .Images.Media.DATA));
-//            File file = new File(paths);
-//            String absolutePath = file.getAbsolutePath();
-//            mUrls.add(absolutePath);
         }
+        LogUtil.d(MainActivity.this,"本地图片格式如下："+mPics.get(0).toString());
         cursor.close();
     }
+
 
     /**
      * android 6.0 以上需要动态申请权限
      */
     private void initPermission() {
-        String[] permissions = {
+        int REQUEST_EXTERNAL_STORAGE = 1;
+        String[] PERMISSIONS_STORAGE = {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
-
-        ArrayList<String> toApplyList = new ArrayList<String>();
-
-        for (String perm : permissions) {
-            if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, perm)) {
-                toApplyList.add(perm);
-                // 进入到这里代表没有权限.
-
-            }
-        }
-        String[] tmpList = new String[toApplyList.size()];
-        //toArray是集合转数组
-        if (!toApplyList.isEmpty()) {
-            ActivityCompat.requestPermissions(this, toApplyList.toArray(tmpList), 1);
+        int permission = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE);
         }
 
     }
@@ -184,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                Intent intent = new Intent(MainActivity.this, ClassifyActivity.class);
                 startActivity(intent);
             }
         });

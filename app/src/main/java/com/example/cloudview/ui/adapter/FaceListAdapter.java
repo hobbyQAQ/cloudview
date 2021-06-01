@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.cloudview.R;
+import com.example.cloudview.base.BaseApplication;
 import com.example.cloudview.model.FaceResult;
 import com.example.cloudview.model.PhotoResult;
 import com.example.cloudview.model.SortFaceResult;
@@ -49,7 +50,10 @@ public class FaceListAdapter extends RecyclerView.Adapter<FaceListAdapter.InnerH
         CircleImageView faceIv = itemView.findViewById(R.id.face_iv);
         TextView nameTv = itemView.findViewById(R.id.face_name);
         nameTv.setText(mData.get(position).getName());
-        String url = UrlUtils.path2Url(mData.get(position).getFacelist().get(0).getPath());
+        //设置封面
+        int  coverPositon = 1;
+        coverPositon = Integer.parseInt(BaseApplication.getCoverMap().get(""+mData.get(position).getCid()));
+        String url = UrlUtils.path2Url(mData.get(position).getFacelist().get(coverPositon).getPath());
         Glide.with(itemView.getContext()).load(url).into(faceIv);
         faceIv.setOnClickListener(new View.OnClickListener() {
             @Override

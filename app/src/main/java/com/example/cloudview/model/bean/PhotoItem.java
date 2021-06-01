@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class PhotoItem implements Serializable {
     private String path;
     private String name;
-    private long createDate;
+    private String createDate;
     private boolean isSelected = false;
 
     @Override
@@ -42,11 +42,11 @@ public class PhotoItem implements Serializable {
         this.name = name;
     }
 
-    public long getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(long createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 }

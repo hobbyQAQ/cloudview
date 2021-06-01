@@ -1,6 +1,13 @@
 apply plugin: 'com.android.application'
 
+
 android {
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -9,11 +16,14 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.example.cloudview"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    aaptOptions {
+        noCompress "tflite"
     }
     buildTypes {
         release {
@@ -30,6 +40,16 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation 'com.wonderkiln:camerakit:0.13.1'
+    implementation 'com.camerakit:camerakit:1.0.0-beta3.11'
+    implementation 'com.camerakit:jpegkit:0.1.0'
+
+
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly-SNAPSHOT'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly-SNAPSHOT'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0'
+    implementation 'org.tensorflow:tensorflow-lite:+'
+
     implementation 'com.squareup.retrofit2:retrofit:2.6.3'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.0'
     implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
@@ -50,5 +70,7 @@ dependencies {
     implementation 'com.leon:lsettingviewlibrary:1.7.0'
     implementation 'com.jph.takephoto:takephoto_library:4.0.3'
     implementation 'com.yanzhenjie:permission:1.0.5'
+    implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
+    implementation 'com.github.HanHuoBin:BaseDialog:1.2.0'
     api project(':imageeditlibrary')
 }

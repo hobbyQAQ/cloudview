@@ -1,39 +1,33 @@
 package com.example.cloudview.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cloudview.Api.PhotoService;
 import com.example.cloudview.R;
-import com.example.cloudview.base.BaseApplication;
 import com.example.cloudview.model.PhotoResult;
 import com.example.cloudview.ui.adapter.PhotoSampleListAdapter;
-import com.example.cloudview.ui.fragment.MineFragment;
-import com.example.cloudview.utils.LogUtil;
-import com.example.cloudview.utils.RetrofitCreator;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class LoveActivity extends AppCompatActivity {
 
     @BindView(R.id.love_photo_list)
     RecyclerView mLoveList;
+    @BindView(R.id.title_head)
+    TextView titleHead;
     private PhotoSampleListAdapter mAdapter;
     private List<PhotoResult.DataBean> mPhotos = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,34 +37,24 @@ public class LoveActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mAdapter = new PhotoSampleListAdapter();
         mLoveList.setAdapter(mAdapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,4);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
         mLoveList.setLayoutManager(layoutManager);
-
-
     }
 
     private void initData() {
-        Retrofit retrofit = RetrofitCreator.getInstance().getRetrofit();
-        PhotoService photoService = retrofit.create(PhotoService.class);
-        Call<PhotoResult> task = photoService.getLoves(BaseApplication.getUser().getId());
-        task.enqueue(new Callback<PhotoResult>() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onResponse(Call<PhotoResult> call, Response<PhotoResult> response) {
-                List<PhotoResult.DataBean> data = response.body().getData();
-                if (data != null) {
-                    LogUtil.d(LoveActivity.this,"data === "+data);
-                    mPhotos = data;
+            public void run() {
+                mPhotos = (List<PhotoResult.DataBean>) getIntent().getSerializableExtra("photos");
+                String title = getIntent().getStringExtra("title");
+                titleHead.setText(title);
+                if (mPhotos != null) {
                     mAdapter.setData(mPhotos);
-                }else{
-                    Toast.makeText(LoveActivity.this, "您还没有添加任何收藏呢", Toast.LENGTH_SHORT).show();
                 }
             }
+        }, 200);
 
-            @Override
-            public void onFailure(Call<PhotoResult> call, Throwable t) {
-                LogUtil.d(LoveActivity.this,"错误信息： "+t.getMessage());
-            }
-        });
     }
 
     public void onBackHandle(View view) {

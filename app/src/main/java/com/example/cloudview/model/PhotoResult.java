@@ -57,6 +57,7 @@ public class PhotoResult implements  Serializable{
          * path : photo/1/IMG_20180215_191434.jpg
          * type : 1
          * love: 0
+         * uid: 1
          */
 
         private int id;
@@ -65,6 +66,7 @@ public class PhotoResult implements  Serializable{
         private String path;
         private int type;
         private int love;
+        private int uid;
 
         @Override
         public String toString() {
@@ -75,6 +77,7 @@ public class PhotoResult implements  Serializable{
                     ", path='" + path + '\'' +
                     ", type=" + type +
                     ", love=" + love +
+                    ", uid=" + uid +
                     '}';
         }
 
@@ -124,6 +127,14 @@ public class PhotoResult implements  Serializable{
 
         public void setType(int type) {
             this.type = type;
+        }
+
+        public int getUid() {
+            return uid;
+        }
+
+        public void setUid(int uid) {
+            this.uid = uid;
         }
     }
 }

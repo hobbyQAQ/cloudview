@@ -54,6 +54,8 @@ public class DownloadActivity extends AppCompatActivity {
 
 
 
+
+
     private void initData() {
         String path="Pictures/cloudview";
         String selection = MediaStore.Images.Media.DATA +" like"+"'%"+path+"%'";
@@ -70,7 +72,7 @@ public class DownloadActivity extends AppCompatActivity {
         while (cursor.moveToNext()) {
             PhotoItem photoItem = new PhotoItem();
             photoItem.setPath(cursor.getString(0));
-            photoItem.setCreateDate(cursor.getLong(1));
+            photoItem.setCreateDate(cursor.getString(1));
             photoItem.setName(cursor.getString(2));
             LogUtil.d(DownloadActivity.this,photoItem.toString());
             mPics.add(photoItem);

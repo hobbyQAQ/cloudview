@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.ClassifyActivity">
+
+    <com.wonderkiln.camerakit.CameraView
+        android:layout_centerHorizontal="true"
+        android:id="@+id/cameraView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center|top" />
+
+
+    <LinearLayout
+        android:id="@+id/top_image_info"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@id/cameraView"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewResult"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:padding="2dp" />
+
+        <TextView
+            android:id="@+id/textViewResult"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:fadeScrollbars="false"
+            android:gravity="center"
+            android:maxLines="15"
+            android:scrollbars="vertical"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_image_info"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnChooseImage"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/choose_image"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black" />
+
+        <Button
+            android:id="@+id/btnToggleCamera"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/toggle_camera"
+            android:textAllCaps="false"
+            android:visibility="visible"
+            android:textColor="@android:color/black" />
+
+        <Button
+            android:id="@+id/btnDetectObject"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/detect_object"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

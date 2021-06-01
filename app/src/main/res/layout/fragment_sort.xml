@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
         <TextView
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="人物"
+            android:text="人物分类"
             android:textStyle="bold"
             android:textSize="18sp"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:id="@+id/face_list"
             android:layout_width="wrap_content"
@@ -21,97 +34,373 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <TextView
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="地点"
+            android:text="地点分类"
             android:textStyle="bold"
             android:textSize="18sp"/>
 
-        <LinearLayout
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/location1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="20dp"
-                android:text="福建省 南平市"
-                android:background="@drawable/circle_text_bg"/>
-            <Button
-                android:layout_marginLeft="10dp"
-                android:layout_width="100dp"
-                android:layout_height="20dp"
-                android:text="江西省 南昌市"
-                android:background="@drawable/circle_text_bg"/>
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:src="@drawable/fjjo"
+                    android:id="@+id/button1"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"/>
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="福建 建瓯"/>
+            </LinearLayout>
 
-            <Button
-                android:layout_marginLeft="10dp"
-                android:layout_width="100dp"
-                android:layout_height="20dp"
-                android:text="江西省 上饶市"
-                android:background="@drawable/circle_text_bg"/>
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/location2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:id="@+id/button2"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:src="@drawable/fjxm" />
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="福建 厦门"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_alignParentRight="true"
+            android:id="@+id/location3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:src="@drawable/jxnc"
+                    android:id="@+id/button3"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"/>
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="江西 南昌"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+    </RelativeLayout>
 
     <TextView
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="事物"
+        android:text="智能分类"
         android:textStyle="bold"
         android:textSize="18sp"/>
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/unclassify_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:src="@mipmap/none"
+                    android:id="@+id/person_cover"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"/>
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="人物"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/building_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:id="@+id/building_cover"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:src="@mipmap/none" />
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="建筑"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_alignParentRight="true"
+            android:id="@+id/car_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:src="@mipmap/none"
+                    android:id="@+id/car_cover"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"/>
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="车"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/certification_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/certification_cover"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/none" />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="证件"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/flower_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/flower_cover"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/none" />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="花卉"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_alignParentRight="true"
+            android:id="@+id/food_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/food_cover"
+                    android:layout_width="101dp"
+                    android:layout_height="115dp"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/none" />
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="食物"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+
         <RelativeLayout
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
-                android:background="@drawable/rectangle_circle_bg"
-                android:src="@mipmap/love"
-                android:id="@+id/scenery_cover"
-                android:layout_width="115dp"
-                android:layout_height="115dp"/>
-            <TextView
-                android:layout_marginLeft="40dp"
-                android:layout_below="@id/scenery_cover"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/screenshot_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="风景"/>
+                android:orientation="vertical">
 
-            <ImageView
-                android:layout_centerHorizontal="true"
-                android:id="@+id/animal_cover"
-                android:layout_width="115dp"
-                android:layout_height="115dp"
-                android:background="@drawable/rectangle_circle_bg"
-                android:src="@mipmap/love" />
-            <TextView
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="40dp"
-                android:layout_below="@id/animal_cover"
+                <ImageView
+                    android:id="@+id/screenshot_cover"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/none" />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="截图"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/pet_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="动物"/>
-            <ImageView
-                android:layout_alignParentRight="true"
-                android:background="@drawable/rectangle_circle_bg"
-                android:src="@mipmap/love"
-                android:id="@+id/credit_cover"
-                android:layout_width="115dp"
-                android:layout_height="115dp"/>
-            <TextView
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="40dp"
-                android:layout_below="@id/animal_cover"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/pet_cover"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/none" />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="宠物"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_alignParentRight="true"
+            android:id="@+id/scenery_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:cardCornerRadius="4dp">
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="证件"/>
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/scenery_cover"
+                    android:layout_width="101dp"
+                    android:layout_height="115dp"
+                    android:background="@drawable/rectangle_circle_bg"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/none" />
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="风景"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
         </RelativeLayout>
 
-
-
-
-
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

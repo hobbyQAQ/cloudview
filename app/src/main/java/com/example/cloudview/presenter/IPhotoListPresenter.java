@@ -35,7 +35,7 @@ public interface IPhotoListPresenter extends IBasePresenter<IPhotoListCallback> 
     /**
      * 上传
      */
-    void upload(PhotoItem photo);
+    void upload(PhotoItem photo,Integer type);
 
     /**
      * 上传多个
@@ -56,4 +56,5 @@ public interface IPhotoListPresenter extends IBasePresenter<IPhotoListCallback> 
     /**
      *
      */
+
 }

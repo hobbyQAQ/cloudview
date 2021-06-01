@@ -15,10 +15,18 @@ import com.github.chrisbanes.photoview.PhotoView;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 本地图片的浏览器
+ */
 public class ImagePagerAdapter extends PagerAdapter {
 
     private ArrayList<PhotoItem> mData = new ArrayList<>();
+
+    private OnPagerChangerListener mListener;
+
+    public void setListener(OnPagerChangerListener listener){
+        mListener = listener;
+    }
 
     @NonNull
     @Override
@@ -28,6 +36,7 @@ public class ImagePagerAdapter extends PagerAdapter {
         photoView.setLayoutParams(layoutParams);
         Glide.with(container.getContext()).load(mData.get(position).getPath()).into(photoView);
         container.addView(photoView);
+        mListener.onPagerChange();
         return photoView;
     }
 
@@ -50,5 +59,9 @@ public class ImagePagerAdapter extends PagerAdapter {
         mData.clear();
         mData.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public interface OnPagerChangerListener {
+        void onPagerChange();
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +81,11 @@ public class PhotoGridListAdapter extends RecyclerView.Adapter<PhotoGridListAdap
 
                 Intent intent = new Intent(itemView.getContext(), PhotoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("position",mStartPosition+position);
+                int pos = mStartPosition + position;
+                bundle.putInt("position",pos);
                 bundle.putSerializable("photos", (Serializable) mAllPhotos);
-                LogUtil.d(PhotoGridListAdapter.this,mAllPhotos.size()+"");
+                LogUtil.d(PhotoGridListAdapter.this,"数据集大小：" +
+                        ""+mAllPhotos.size()+" mStartPosition："+mStartPosition+" position "+position+" pos "+pos);
                 intent.putExtras(bundle);
                 itemView.getContext().startActivity(intent);
             }
@@ -95,6 +98,7 @@ public class PhotoGridListAdapter extends RecyclerView.Adapter<PhotoGridListAdap
     }
 
     public void setAllPhoto(List<PhotoResult.DataBean> data) {
+        Log.d("PhotoGridListAdapter.setAllPhoto",data.toString());
         this.mAllPhotos = data;
     }
 

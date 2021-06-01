@@ -1,0 +1,8 @@
+building
+car
+certification
+flower
+food
+person
+pet
+scenery

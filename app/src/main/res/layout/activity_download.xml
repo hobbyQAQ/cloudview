@@ -20,7 +20,8 @@
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="返回"/>
+            android:textSize="18sp"
+            android:text="我的下载"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/download_list"

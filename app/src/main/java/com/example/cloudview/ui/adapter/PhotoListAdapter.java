@@ -34,7 +34,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Inne
     private Map<Integer, List<PhotoResult.DataBean>>  mSortData = new HashMap<>();
     //初始化的开始位置，用来传给照片查看器应该查看哪张照片
     private int mStartPosition = 0;
-    private List<Integer> mKeys = new ArrayList<>();
+    private PhotoGridListAdapter mPhotoGridListAdapter;
 
     @NonNull
     @Override
@@ -60,13 +60,12 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Inne
             e.printStackTrace();
         }
         //每一行中数据不同
-        PhotoGridListAdapter photoGridListAdapter = new PhotoGridListAdapter(mSortData.get(position));
+        mPhotoGridListAdapter = new PhotoGridListAdapter(mSortData.get(position));
         //同时要将每一行中第一张照片属于所有照片的第几张照片传过去
-        photoGridListAdapter.setStartPosition(mStartPosition);
-        mStartPosition = mStartPosition + mSortData.get(position).size();
-        LogUtil.d(PhotoListAdapter.this,"开始位置 ==== "+mStartPosition+"");
-        photoGridListAdapter.setAllPhoto(mData);
-        gridList.setAdapter(photoGridListAdapter);
+        mPhotoGridListAdapter.setStartPosition(mStartPosition);
+        mStartPosition = (mStartPosition + mSortData.get(position).size())%mData.size();
+        mPhotoGridListAdapter.setAllPhoto(mData);
+        gridList.setAdapter(mPhotoGridListAdapter);
         gridList.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -99,10 +98,6 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Inne
         //把键重Mapper中取出来放到list中
         try {
             mSortData = DateUtils.sortPhotoByDate(photoList);
-            Set<Map.Entry<Integer, List<PhotoResult.DataBean>>> entries = mSortData.entrySet();
-            for (Map.Entry<Integer, List<PhotoResult.DataBean>> entry : entries) {
-                mKeys.add(entry.getKey());
-            }
         }catch (Exception e){
             e.printStackTrace();
         }

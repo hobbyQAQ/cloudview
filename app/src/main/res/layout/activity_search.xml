@@ -6,6 +6,8 @@
     android:orientation="vertical">
 
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -73,7 +75,17 @@
 
     </LinearLayout>
 
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/text_hint"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="关键词为'2020'的搜索结果："
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <FrameLayout
+        android:layout_marginTop="10dp"
         android:id="@+id/search_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

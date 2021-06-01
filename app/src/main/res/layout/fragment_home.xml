@@ -2,27 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
+
+
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <RelativeLayout
                 android:layout_marginTop="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:layout_marginLeft="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/color_black"
+                    android:id="@+id/title_local"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="本机未上传"
+                    android:textColor="@color/color_black"
                     android:textSize="15sp"
-                    android:text="本机未上传"/>
+                    android:textStyle="bold" />
                 <Button
+                    android:visibility="invisible"
                     android:background="@drawable/background_upload_button"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@id/select_upload_button"
@@ -30,7 +41,7 @@
                     android:layout_width="80dp"
                     android:layout_height="25dp"
                     android:textSize="15sp"
-                    android:text="一键上传"/>
+                    android:text="上传"/>
                 <Button
                     android:background="@drawable/background_upload_button"
                     android:layout_marginRight="10dp"
@@ -61,13 +72,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-
                     android:layout_marginLeft="20dp"
-                    android:layout_alignParentLeft="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
                     android:text="查看方式"/>
+                <TextView
+                    android:id="@+id/sort_way_title"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="50dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:text="时间升序"/>
                 <ImageView
                     android:id="@+id/change_sort_way"
                     android:layout_marginRight="25dp"
@@ -78,12 +95,24 @@
             </RelativeLayout>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/photo_scan_reyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+
+
+                <!--            <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout-->
+                <!--                android:id="@+id/photo_result_refresh_layout"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="match_parent">-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/photo_scan_reyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <!--            </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>-->
+
+
+
+
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
 
+    </androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

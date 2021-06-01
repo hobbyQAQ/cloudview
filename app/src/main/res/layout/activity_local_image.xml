@@ -52,6 +52,20 @@
         android:layout_height="500dp" />
 
 
+
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/photo_scanner"
+        android:textColor="@color/color_black"
+        android:text="未分类"
+        android:id="@+id/group_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
+
+
     <LinearLayout
         android:id="@+id/bottom_toolbar"
         android:layout_alignParentBottom="true"
@@ -89,6 +103,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="拍照"/>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/class_iv"
+                android:src="@mipmap/classify"
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选择分类"/>
         </LinearLayout>
         <LinearLayout
             android:gravity="center"

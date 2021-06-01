@@ -33,23 +33,24 @@
         android:src="@mipmap/camera"
         />
     <TextView
-        android:id="@+id/hhhhh"
-        android:layout_marginTop="50dp"
+        android:id="@+id/charater_name"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="30dp"
         android:layout_below="@id/back_container"
         android:layout_toRightOf="@id/face_cover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="他是谁？点击选择一张封面"/>
+        android:text="      未命名"/>
     <TextView
-        android:id="@+id/charater_name"
+        android:id="@+id/charater_text_hint"
+        android:layout_below="@id/charater_name"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
-        android:layout_below="@id/hhhhh"
         android:layout_toRightOf="@id/face_cover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="      未命名"/>
+        android:text="他是谁？点击选择一张封面"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="10dp"

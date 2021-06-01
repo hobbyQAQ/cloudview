@@ -3,7 +3,6 @@ package com.example.cloudview.ui.activity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 
@@ -13,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,31 +23,44 @@ import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cloudview.R;
+import com.example.cloudview.base.BaseApplication;
 import com.example.cloudview.model.PhotoResult;
 import com.example.cloudview.model.bean.PhotoItem;
 import com.example.cloudview.presenter.Impl.PhotoListPresenter;
 import com.example.cloudview.ui.adapter.ImagePagerAdapter;
+import com.example.cloudview.utils.Classifier;
 import com.example.cloudview.utils.FileUtils;
+import com.example.cloudview.utils.LogUtil;
+import com.example.cloudview.utils.TensorFlowImageClassifier;
 import com.example.cloudview.view.IPhotoListCallback;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class LocalImageActivity extends AppCompatActivity implements View.OnClickListener, IPhotoListCallback {
+public class LocalImageActivity extends AppCompatActivity implements View.OnClickListener, IPhotoListCallback, ImagePagerAdapter.OnPagerChangerListener {
     public static final int REQUEST_PERMISSON_SORAGE = 1;
     public static final int REQUEST_PERMISSON_CAMERA = 2;
 
@@ -56,15 +69,40 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
     public static final int ACTION_REQUEST_EDITIMAGE = 9;
     public static final int ACTION_STICKERS_IMAGE = 10;
 
+
+    private static final String MODEL_PATH = "model.tflite";
+    private static final boolean QUANT = true;
+    private static final String LABEL_PATH = "label.txt";
+    private static final int INPUT_SIZE = 224;
+    private static final int REQUEST_CODE_CHOOSE = 1;
+
+    private String mGroupText = "未分类";
+
+    private Classifier classifier;
+
+    private Executor executor = Executors.newSingleThreadExecutor();
+
+    private Map<String,Integer> numMap = new HashMap<>();
+
+
     private Unbinder mBind;
+
+
+    @BindView(R.id.group_tv)
+    TextView mGroupTv;
+
     @BindView(R.id.edit_iv)
     ImageView mEditIv;
+
+    @BindView(R.id.camera_iv)
+    ImageView mCarmeraIv;
+
+    @BindView(R.id.class_iv)
+    ImageView mClassifyIv;
 
     @BindView(R.id.delete_iv)
     ImageView mDeleteIv;
 
-    @BindView(R.id.camera_iv)
-    ImageView mCameraIv;
 
     @BindView(R.id.upload_iv)
     ImageView mUploadIv;
@@ -114,10 +152,53 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
             builder.detectFileUriExposure();
         }
 
-
+        numMap.put("未分类",0);
+        numMap.put("人物",1);
+        numMap.put("建筑",2);
+        numMap.put("车",3);
+        numMap.put("证件",4);
+        numMap.put("花卉",5);
+        numMap.put("食物",6);
+        numMap.put("宠物",7);
+        numMap.put("风景",8);
+        numMap.put("截图",9);
         initListener();
         initPresenter();
+        mPagerAdapter.setListener(this);
+        initTensorFlowAndLoadModel();
+    }
 
+    @Override
+    public void onPagerChange() {
+        mPosition = mViewPager.getCurrentItem();
+        classify();
+//        Toast.makeText(this, "当前位置："+mPosition, Toast.LENGTH_SHORT).show();
+    }
+
+    private void classify() {
+        String path = mPhotos.get(mPosition).getPath();
+        Bitmap bitmap;
+        bitmap = BitmapFactory.decodeFile(path,getBitmapOption(2));
+//                Toast.makeText(LocalImageActivity.this, path, Toast.LENGTH_LONG).show();
+        Log.d("LocalImageActivity","绝对路径:"+path);
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
+        final List<Classifier.Recognition> results = classifier.recognizeImage(bitmap);
+        Map<String,String> map = new HashMap();
+        map.put("food","食物");
+        map.put("car","车");
+        map.put("building","建筑");
+        map.put("certification","证件");
+        map.put("scenery","风景");
+        map.put("pet","宠物");
+        map.put("person","人物");
+        map.put("flower","花卉");
+        if (!results.isEmpty()) {
+            mGroupText = map.get(results.get(0).getTitle());
+        }
+        if(path.contains("Screenshot"))
+            mGroupText = "截图";
+        mGroupTv.setText(mGroupText);
     }
 
     private void initPresenter() {
@@ -125,8 +206,27 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
         mPhotoListPresenter.registerCallback(this);
     }
 
+
     private void initListener() {
         mEditIv.setOnClickListener(this);
+        mCarmeraIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePhotoClick();
+            }
+        });
+        mGroupTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseGroup();
+            }
+        });
+        mClassifyIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseGroup();
+            }
+        });
         mBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,21 +255,92 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
         mUploadIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LocalImageActivity.this, "正在上传...", Toast.LENGTH_LONG).show();
                 if (mPhotoListPresenter != null) {
-                    mPhotoListPresenter.upload(mPhotos.get(mPosition));
+                    confirmUpdate();
+
                 }
             }
         });
 
-        mCameraIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                takePhotoClick();
-//                Toast.makeText(LocalImageActivity.this, "你上传了拍照按钮", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
+
+    private void chooseGroup() {
+        final String[] items = new String[]{"未分类","建筑","车","证件","花卉","食物","宠物","风景", "人物","截图"};//创建item
+        AlertDialog alertDialog = new AlertDialog.Builder(LocalImageActivity.this)
+                .setTitle("选择排列顺序")
+                .setItems(items, new DialogInterface.OnClickListener() {//添加列表
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i){
+                            case 0:
+                                mGroupText = "未分类";
+                                // TODO: 2021/5/10 更新上传时的分类属性
+                                break;
+                            case 1:
+                                mGroupText = "建筑";
+                                break;
+                            case 2:
+                                mGroupText = "车";
+                                break;
+                            case 3:
+                                mGroupText = "证件";
+                                break;
+                            case 4:
+                                mGroupText = "花卉";
+                                break;
+                            case 5:
+                                mGroupText = "食物";
+                                break;
+                            case 6:
+                                mGroupText = "宠物";
+                                break;
+                            case 7:
+                                mGroupText = "风景";
+                                break;
+                            case 8:
+                                mGroupText = "人物";
+                                break;
+                            case 9:
+                                mGroupText = "截图";
+                                break;
+                        }
+                        mGroupTv.setText(mGroupText);
+                    }
+                })
+                .create();
+        alertDialog.show();
+    }
+
+    private BitmapFactory.Options getBitmapOption(int inSampleSize){
+        System.gc();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPurgeable = true;
+        options.inSampleSize = inSampleSize;
+        return options;
+    }
+
+    /**
+     * 根据路径 转bitmap
+     * @param urlpath
+     * @return
+     */
+    public static Bitmap getBitMBitmap(String urlpath) {
+
+        Bitmap map = null;
+        try {
+            URL url = new URL(urlpath);
+            URLConnection conn = url.openConnection();
+            conn.connect();
+            InputStream in;
+            in = conn.getInputStream();
+            map = BitmapFactory.decodeStream(in);
+            // TODO Auto-generated catch block
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
 
     private void handleDelete() {
         mPhotos.remove(mPosition);
@@ -203,6 +374,36 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+    }
+
+    private void confirmUpdate() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LocalImageActivity.this);
+        builder.setMessage("确定以'"+mGroupText+"'分类上传吗？");
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                handleUpload();
+                dialog.dismiss();
+            }
+        });
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+    }
+
+
+
+    private void handleUpload() {
+        mPhotoListPresenter.upload(mPhotos.get(mPosition),numMap.get(mGroupText));
     }
 
     /**
@@ -247,6 +448,18 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    /** * @param uri：图片的本地url地址 * @return Bitmap； */
+    private Bitmap decodeUriAsBitmap(Uri uri) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return bitmap;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -254,6 +467,40 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
         if (mPhotoListPresenter != null) {
             mPhotoListPresenter.unRegisterCallback(this);
         }
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                classifier.close();
+            }
+        });
+    }
+
+    private void initTensorFlowAndLoadModel() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    classifier = TensorFlowImageClassifier.create(
+                            getAssets(),
+                            MODEL_PATH,
+                            LABEL_PATH,
+                            INPUT_SIZE,
+                            QUANT);
+                    makeButtonVisible();
+                } catch (final Exception e) {
+                    throw new RuntimeException("Error initializing TensorFlow!", e);
+                }
+            }
+        });
+    }
+
+    private void makeButtonVisible() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mClassifyIv.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 
@@ -368,8 +615,10 @@ public class LocalImageActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void onUpload() {
-
+    public void onUpload(Boolean isSuccess) {
+        Toast.makeText(this, "上传成功", Toast.LENGTH_SHORT).show();
+        mPhotoListPresenter.getPhotoListByUserId(BaseApplication.getUser().getId());
+        LogUtil.d(LocalImageActivity.this,"upload callback");
     }
 
     @Override

@@ -27,7 +27,7 @@
             android:textStyle="bold"/>
         <ImageView
             android:id="@+id/iv_setting"
-            android:src="@mipmap/setting_normal"
+            android:src="@mipmap/classify"
             android:layout_marginRight="10dp"
             android:layout_gravity="right"
             android:layout_width="30dp"

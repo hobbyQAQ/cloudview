@@ -3,7 +3,9 @@ package com.example.cloudview.ui.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -28,6 +30,9 @@ public class LoginActivity extends AppCompatActivity {
     EditText password_tv;
     TextView register_button;
 
+    private SharedPreferences mPref;
+    private SharedPreferences.Editor mEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +46,11 @@ public class LoginActivity extends AppCompatActivity {
         password_tv=findViewById(R.id.password_tv);
         account_tv=findViewById(R.id.account_tv);
         register_button=findViewById(R.id.register_button);
+        mPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String account = mPref.getString("account","");
+        String password = mPref.getString("password","");
+        account_tv.setText(account);
+        password_tv.setText(password);
     }
 
     private void initView() {
@@ -59,10 +69,15 @@ public class LoginActivity extends AppCompatActivity {
                         LogUtil.d(LoginActivity.this,userResult.toString());
                         if (userResult != null && userResult.isSuccess()) {
                             //把用户信息保存到SharePrefrecence里面
+                            mEditor = mPref.edit();
+                            mEditor.putString("account",account_tv.getText().toString());
+                            mEditor.putString("password",password_tv.getText().toString());
+                            mEditor.apply();
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             intent.putExtra("user",userResult.getData());
                             startActivity(intent);
                             // TODO: 2020/6/3 之后MainActivity 的返回界面不是LoginActivity
+                            finish();
 
                         }else{
                             //登录失败的逻辑

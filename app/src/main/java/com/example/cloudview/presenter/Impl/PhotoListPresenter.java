@@ -33,6 +33,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+
+/**
+ * 云端图片管理的presenter：通过管理Callback接口，实现界面直接数据的耦合，或者说是数据的一致性，操作的解耦
+ */
 public class PhotoListPresenter implements IPhotoListPresenter {
     private List<IPhotoListCallback> mCallbacks = new ArrayList<>();
 
@@ -69,14 +73,12 @@ public class PhotoListPresenter implements IPhotoListPresenter {
 
                     for (IPhotoListCallback callback : mCallbacks) {
                         List<PhotoResult.DataBean> data = body.getData();
-//                        LogUtil.d(PhotoListPresenter.this,"data ====> "+data.toString());
+                        LogUtil.d(PhotoListPresenter.this,"data ====> "+data.toString());
                         if (data != null &&data.size() != 0) {
                             callback.onPhotoListLoad(data);
                         }else{
                             callback.onEmpty();
                         }
-
-
                     }
                     LogUtil.d(PhotoListPresenter.this, "response body ==> " + body);
                 } else {
@@ -101,6 +103,7 @@ public class PhotoListPresenter implements IPhotoListPresenter {
 
     }
 
+
     @Override
     public void pre() {
 
@@ -111,23 +114,27 @@ public class PhotoListPresenter implements IPhotoListPresenter {
 
     }
 
+
+
     @Override
-    public void upload(PhotoItem photoItem) {
+    public void upload(PhotoItem photoItem,Integer type) {
+        Toast.makeText(BaseApplication.getContext(), "正在上传", Toast.LENGTH_SHORT).show();
         Retrofit retrofit = RetrofitCreator.getInstance().getRetrofit();
         PhotoService photoService = retrofit.create(PhotoService.class);
         MultipartBody.Part file =getPart("file",photoItem.getPath());
-        Call<SimpleResult> task = photoService.postFile(file,1);
+        Call<SimpleResult> task = photoService.postFile(file,type,1);
         task.enqueue(new Callback<SimpleResult>() {
             @Override
             public void onResponse(Call<SimpleResult> call, Response<SimpleResult> response) {
-                //
-                Log.d("SimpleResult","文件上传结果" + response.body());
-                Toast.makeText(BaseApplication.getContext(), "上传成功", Toast.LENGTH_SHORT).show();
+                SimpleResult result = response.body();
+                //通知主界面更新UI
+                for (IPhotoListCallback callback : mCallbacks) {
+                    callback.onUpload(result.isSuccess());
+                }
             }
 
             @Override
             public void onFailure(Call<SimpleResult> call, Throwable t) {
-                Log.d("SimpleResult","onFailure -- > 文件上传失败 ---> " + t.toString());
                 Toast.makeText(BaseApplication.getContext(), "上传失败", Toast.LENGTH_SHORT).show();
 
             }

@@ -13,7 +13,7 @@ public interface IPhotoListCallback extends IBaseCallback {
     void onNext(PhotoResult.DataBean photo);
     void onPre(PhotoResult.DataBean photo);
 
-    void onUpload();
+    void onUpload(Boolean isSuccess);
     void onDownload();
 }
 

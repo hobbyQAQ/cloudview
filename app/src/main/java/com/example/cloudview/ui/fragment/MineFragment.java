@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.cloudview.Api.PhotoService;
@@ -146,8 +149,37 @@ public class MineFragment extends TakePhotoFragment {
             @Override
             public void click(boolean isChecked) {
                 Intent intent = new Intent(getActivity(), LoveActivity.class);
+                Retrofit retrofit = RetrofitCreator.getInstance().getRetrofit();
+                PhotoService photoService = retrofit.create(PhotoService.class);
+                Call<PhotoResult> task = photoService.getLoves(BaseApplication.getUser().getId());
+                task.enqueue(new Callback<PhotoResult>() {
+                    @Override
+                    public void onResponse(Call<PhotoResult> call, Response<PhotoResult> response) {
+                        List<PhotoResult.DataBean> data = response.body().getData();
+                        if (data != null) {
+                            LogUtil.d(MineFragment.this,"data === "+data);
+                            intent.putExtra("photos",(Serializable) data);
+                            intent.putExtra("title","我的收藏");
 
-                startActivity(intent);
+                        }else{
+                            Toast.makeText(getContext(), "空空如也", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PhotoResult> call, Throwable t) {
+                        LogUtil.d(MineFragment.this,"错误信息： "+t.getMessage());
+                    }
+                });
+                FragmentActivity activity = getActivity();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(intent);
+                    }
+                },100);
+
             }
         });
         mItemMyInfo.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
@@ -188,6 +220,34 @@ public class MineFragment extends TakePhotoFragment {
             }
         });
     }
+
+
+
+    private int backtouch = 0;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_BACK){
+
+                    backtouch ++;
+                    if(backtouch == 2){
+                        getActivity().finish();
+                    }else{
+                        Toast.makeText(getActivity(), "再按一次退出", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
 
     @Override
     public void takeSuccess(TResult result) {
